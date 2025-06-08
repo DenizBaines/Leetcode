@@ -1,20 +1,18 @@
 class Solution {
 public:
-    vector<int> ans;
-    int n;
-    void f(int i){
-        if (i>n) return;
-        if (i>0) ans.push_back(i);
-        for(int j=(i==0)?1:0; j<=9; j++){
-            int x=10*i+j;
-            if (x>n) break;
-            f(x);
-        }
-    }
     vector<int> lexicalOrder(int n) {
-        this->n=n;
-        ans.reserve(n);
-        f(0);
-        return ans;
+        vector<int> v;
+        int count = 1;
+        for (int i = 0; i < n; i++) {
+            v.push_back(count);
+            if (count * 10 <= n) {
+                count *= 10;  // Go deeper (e.g., 1 -> 10)
+            } else {
+                if (count >= n) count /= 10;  // Go up if at the limit
+                count++;
+                while (count % 10 == 0) count /= 10;  // Remove trailing zeros
+            }
+        }
+        return v;
     }
 };
