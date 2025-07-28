@@ -1,33 +1,24 @@
-class Solution
-{
+class Solution {
 public:
-    void backtrack(const vector<int> &nums, int index, int currentOR, int maxOR, int &count)
-    {
-        if (currentOR == maxOR)
-        {
-            count++;
+    int n;
+    int solve(vector<int>&nums,int &maxOr,int currOr,int idx){
+        if(idx>=n){
+            // Maximum Bitwise-OR Subset
+            if(currOr==maxOr) return 1;
+            return 0;
         }
 
-        for (int i = index; i < nums.size(); ++i)
-        {
-            backtrack(nums, i + 1, currentOR | nums[i], maxOR, count);
-        }
+        int take=solve(nums,maxOr,nums[idx]|currOr,idx+1);
+        int skip=solve(nums,maxOr,currOr,idx+1);
+
+        return take+skip;
     }
+    int countMaxOrSubsets(vector<int>& nums) {
+        n=nums.size();
 
-    int countMaxOrSubsets(vector<int> &nums)
-    {
-        int maxOR = 0;
+        int maxOr=0;
+        for(int &i:nums) maxOr|=i;
 
-        // Step 1: Compute the maximum OR
-        for (int num : nums)
-        {
-            maxOR |= num;
-        }
-
-        int count = 0;
-        // Step 2: Backtrack to count the subsets
-        backtrack(nums, 0, 0, maxOR, count);
-
-        return count;
+        return solve(nums,maxOr,0,0);
     }
 };
